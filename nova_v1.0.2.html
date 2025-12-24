@@ -136,13 +136,11 @@ border-color: rgba(255,255,255,0.1);
 transform: rotate(90deg);
 }
 
-/* --- APPS CONTAINER FIX --- */
 .apps-container {
 display: grid; grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
-gap: 15px; /* Increased gap */
+gap: 15px;
 margin-bottom: 20px;
 max-height: 160px; overflow-y: auto;
-/* Increased padding creates a buffer so hover effects don't get clipped */
 padding: 15px;
 }
 .apps-container::-webkit-scrollbar { width: 3px; }
@@ -153,12 +151,11 @@ display: flex; flex-direction: column;
 align-items: center; gap: 6px;
 cursor: pointer; transition: 0.3s;
 position: relative;
-/* Ensure it renders above if items overlap */
 z-index: 1;
 }
 .app-item:hover {
-transform: translateY(-5px); /* Move up */
-z-index: 10; /* Pop above others */
+transform: translateY(-5px);
+z-index: 10;
 }
 
 .app-icon {
@@ -178,7 +175,7 @@ transition: border-color 0.3s;
 .app-item:hover .app-name { color: white; }
 
 .delete-badge {
-position: absolute; top: -8px; right: -8px; /* Moved slightly further out */
+position: absolute; top: -8px; right: -8px;
 width: 18px; height: 18px;
 background: var(--accent); border-radius: 50%;
 color: white; font-size: 10px;
@@ -256,21 +253,26 @@ overflow: hidden;
 .log-badge { font-size: 0.5rem; padding: 2px 8px; border-radius: 20px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; border: 1px solid currentColor; }
 .log-body { display: flex; gap: 12px; }
 
-/* --- REVISED IMAGE LAYOUT CSS --- */
-/* Default / Left Layout */
 .log-body.layout-left { flex-direction: row; align-items: flex-start; }
-
-/* Right Layout - uses row-reverse to swap image to right side */
 .log-body.layout-right { flex-direction: row-reverse; align-items: flex-start; text-align: left; }
-
-/* Bottom Layout */
 .log-body.layout-bottom { flex-direction: column; }
-/* ------------------------------- */
 
 .log-msg { font-size: 0.7rem; color: #b0b0b0; line-height: 1.5; margin: 0; flex: 1; font-weight: 300; }
-.log-img-wrap { border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+/* Updated Image Wrapper for Clickability */
+.log-img-wrap {
+border-radius: 8px; overflow: hidden;
+border: 1px solid rgba(255,255,255,0.1);
+flex-shrink: 0;
+box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+cursor: zoom-in; /* Change cursor to zoom icon */
+position: relative;
+}
 .log-img-wrap img { display: block; width: 100%; height: auto; transition: 0.3s; }
 .log-card:hover .log-img-wrap img { transform: scale(1.05); }
+
+/* Added hover effect to indicate clickability */
+.log-img-wrap:hover { border-color: var(--primary); }
+
 .log-body.layout-left .log-img-wrap, .log-body.layout-right .log-img-wrap { width: 60px; height: 60px; }
 .log-body.layout-left .log-img-wrap img, .log-body.layout-right .log-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
 .log-author { display: flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 0.6rem; color: rgba(255,255,255,0.4); border-top: 1px solid rgba(255,255,255,0.05); padding-top: 6px; }
@@ -299,6 +301,26 @@ input:checked + .slider:before { transform: translateX(22px); }
 .locked-overlay { position: absolute; inset: 0; border-radius: 24px; background: rgba(5, 5, 5, 0.96); backdrop-filter: blur(30px); z-index: 50; display: none; align-items: center; justify-content: center; flex-direction: column; padding: 30px; text-align: center; }
 .card-main.locked .locked-overlay { display: flex; animation: fadeIn 0.5s; }
 .locked-icon { font-size: 3rem; margin-bottom: 15px; color: var(--accent); text-shadow: 0 0 30px var(--accent); }
+
+/* --- NEW IMAGE VIEWER STYLES --- */
+#imgPreviewModal .img-view-content {
+max-width: 90vw;
+max-height: 85vh;
+object-fit: contain;
+border-radius: 12px;
+box-shadow: 0 0 50px rgba(0,0,0,0.5);
+border: 1px solid rgba(255,255,255,0.1);
+animation: zoomIn 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.close-preview {
+position: absolute; top: 20px; right: 30px;
+color: white; font-size: 30px; font-weight: 300;
+cursor: pointer; z-index: 101; opacity: 0.7; transition: 0.3s;
+background: rgba(0,0,0,0.5); width: 40px; height: 40px;
+border-radius: 50%; display: flex; align-items: center; justify-content: center;
+}
+.close-preview:hover { opacity: 1; background: var(--accent); transform: rotate(90deg); }
+@keyframes zoomIn { from{transform:scale(0.9); opacity:0;} to{transform:scale(1); opacity:1;} }
 
 @media (max-width: 850px) {
 .wrapper { padding: 10px; height: auto; display: block; overflow-y: auto;}
@@ -354,6 +376,7 @@ DEV LOGS
 </div>
 </div>
 </div>
+
 <div class="modal" id="settingsModal">
 <div class="modal-content">
 <h2 class="modal-header">SYSTEM CONFIG</h2>
@@ -374,6 +397,7 @@ DEV LOGS
 <button onclick="closeModals()" class="action-btn" style="margin-top:10px; background:transparent; color: #888;">CANCEL</button>
 </div>
 </div>
+
 <div class="modal" id="addAppModal">
 <div class="modal-content">
 <h2 class="modal-header">NEW SHORTCUT</h2>
@@ -384,6 +408,13 @@ DEV LOGS
 <button onclick="closeModals()" class="action-btn" style="margin-top:10px; background:transparent; color: #888;">CANCEL</button>
 </div>
 </div>
+
+<div class="modal" id="imgPreviewModal" onclick="closeModals()">
+<div style="position: relative; max-width: 90%; display: flex; justify-content: center; align-items: center;">
+<div class="close-preview" onclick="closeModals()">×</div>
+<img id="previewImageElement" class="img-view-content" src="" onclick="event.stopPropagation()"> </div>
+</div>
+
 <script>
 let SYSTEM_LOCKED = true;
 const DEFAULT_APPS = [{ name: "Slope", url: "https://slope-unblocked-10x.github.io/", icon: "https://slopeunblocked.bitbucket.io/img/slope.png" }];
@@ -427,6 +458,15 @@ document.getElementById('newAppUrl').value='';
 document.getElementById('newAppIcon').value='';
 }
 }
+
+// Function to handle Image Opening
+function openImage(url) {
+const modal = document.getElementById('imgPreviewModal');
+const img = document.getElementById('previewImageElement');
+img.src = url;
+modal.classList.add('show');
+}
+
 async function loadDevLogs() {
 const container = document.getElementById('devLogsContainer');
 try {
@@ -437,9 +477,9 @@ const logs = await res.json();
 container.innerHTML = logs.map(log => {
 const accentColor = log.color || 'var(--primary)';
 const hasImg = log.image && log.image.length > 0;
-const imgHtml = hasImg ? `<div class="log-img-wrap"><img src="${log.image}" loading="lazy"></div>` : '';
+// Added onclick event to the image wrapper
+const imgHtml = hasImg ? `<div class="log-img-wrap" onclick="openImage('${log.image}')"><img src="${log.image}" loading="lazy"></div>` : '';
 
-// Standardize logic: Image always inserted first in DOM, CSS handles visual order
 let layoutClass = 'layout-bottom';
 if (log.layout === 'left' || log.layout === 'side') layoutClass = 'layout-left';
 if (log.layout === 'right') layoutClass = 'layout-right';
