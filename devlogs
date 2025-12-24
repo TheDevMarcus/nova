@@ -1,10 +1,10 @@
 [
   {
-    "title": "Emergency Patch",
-    "badge": "ALERT",
-    "message": "We found a bug in the protocol. It is now fixed.",
+    "title": "System Config Update",
+    "badge": "BETA",
+    "message": "We are rolling out system config settings to a select few meaning it's right around the corner!",
     "author": "Chip Hill",
-    "color": "#ff0050" 
+    "color": "#ffa500" 
   },
   {
     "title": "Project Status #1",
