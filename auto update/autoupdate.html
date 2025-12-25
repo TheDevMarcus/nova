@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nova</title>
+    <title>NOVA</title>
     <style>
         body, html {
             margin: 0;
             padding: 0;
-            background-color: #0f172a;
+            background-color: #050b18;
             color: white;
-            font-family: 'Inter', -apple-system, sans-serif;
-            overflow-x: hidden;
+            font-family: sans-serif;
+            overflow: hidden;
+            height: 100%;
         }
 
-        #loader-container {
+        #loader-overlay {
             position: fixed;
             top: 0;
             left: 0;
@@ -24,93 +25,93 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background-color: #0f172a;
-            z-index: 9999;
-            transition: opacity 0.5s ease, visibility 0.5s;
+            background: #050b18;
+            z-index: 99999;
+            transition: opacity 0.5s ease;
         }
 
         .spinner {
-            width: 50px;
-            height: 50px;
-            border: 3px solid rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(56, 189, 248, 0.1);
             border-top-color: #38bdf8;
-            animation: spin 1s ease-in-out infinite;
-            margin-bottom: 20px;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        .loading-text {
-            font-size: 14px;
-            letter-spacing: 2px;
+        .status-text {
+            margin-top: 20px;
+            font-size: 11px;
+            letter-spacing: 3px;
             text-transform: uppercase;
-            color: #94a3b8;
+            color: #38bdf8;
+            font-weight: bold;
         }
 
-        #main-content {
+        #content-area {
             opacity: 0;
-            transition: opacity 0.8s ease-in;
+            transition: opacity 0.5s ease;
         }
 
-        #main-content.loaded {
+        #content-area.visible {
             opacity: 1;
         }
     </style>
 </head>
 <body>
 
-    <div id="loader-container">
+    <div id="loader-overlay">
         <div class="spinner"></div>
-        <div class="loading-text">Initializing...</div>
+        <div class="status-text" id="msg">Syncing Nova</div>
     </div>
 
-    <div id="main-content"></div>
+    <div id="content-area"></div>
 
     <script>
-        const RAW_URL = 'https://raw.githubusercontent.com/TheDevMarcus/verison/refs/heads/main/auto%20update/v1';
-
-        async function fetchAndInject() {
-            const container = document.getElementById('main-content');
-            const loader = document.getElementById('loader-container');
+        const URL = 'https://raw.githubusercontent.com/TheDevMarcus/verison/refs/heads/main/auto%20update/v1';
+        
+        async function load() {
+            const display = document.getElementById('content-area');
+            const overlay = document.getElementById('loader-overlay');
+            const msg = document.getElementById('msg');
 
             try {
-                const response = await fetch(RAW_URL);
-                if (!response.ok) throw new Error();
-                const htmlString = await response.text();
+                const res = await fetch(URL);
+                if (!res.ok) throw new Error();
+                const raw = await res.text();
+                
                 const parser = new DOMParser();
-                const externalDoc = parser.parseFromString(htmlString, 'text/html');
+                const doc = parser.parseFromString(raw, 'text/html');
 
-                const styles = externalDoc.querySelectorAll('link[rel="stylesheet"], style');
-                styles.forEach(style => document.head.appendChild(style.cloneNode(true)));
+                const styles = doc.querySelectorAll('style, link[rel="stylesheet"]');
+                styles.forEach(s => document.head.appendChild(s.cloneNode(true)));
 
-                container.innerHTML = externalDoc.body.innerHTML;
+                display.innerHTML = doc.body.innerHTML;
 
-                const scripts = externalDoc.querySelectorAll('script');
-                for (const oldScript of scripts) {
-                    const newScript = document.createElement('script');
-                    Array.from(oldScript.attributes).forEach(attr => {
-                        newScript.setAttribute(attr.name, attr.value);
-                    });
-                    newScript.textContent = oldScript.textContent;
-                    document.body.appendChild(newScript);
-                }
+                const scripts = doc.querySelectorAll('script');
+                scripts.forEach(s => {
+                    const n = document.createElement('script');
+                    Array.from(s.attributes).forEach(a => n.setAttribute(a.name, a.value));
+                    n.textContent = s.textContent;
+                    document.body.appendChild(n);
+                });
 
+                msg.innerText = "Complete";
                 setTimeout(() => {
-                    loader.style.opacity = '0';
-                    loader.style.visibility = 'hidden';
-                    container.classList.add('loaded');
-                }, 600);
+                    overlay.style.opacity = '0';
+                    display.classList.add('visible');
+                    setTimeout(() => overlay.remove(), 500);
+                }, 400);
 
-            } catch (error) {
-                document.querySelector('.loading-text').innerText = 'Error Loading Version';
-                document.querySelector('.loading-text').style.color = '#ef4444';
+            } catch (e) {
+                msg.innerText = "Load Failed";
+                msg.style.color = "#ff4444";
             }
         }
 
-        fetchAndInject();
+        window.addEventListener('load', load);
     </script>
 </body>
 </html>
