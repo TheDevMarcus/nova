@@ -564,54 +564,93 @@ const html = `
 <head>
 <title>${isCloaked ? cTitle : 'NOVA'}</title>
 <link rel="icon" href="${isCloaked ? cIcon : ''}">
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@800&family=Outfit:wght@500;700&display=swap" rel="stylesheet">
 <style>
+* { box-sizing: border-box; }
 body { margin: 0; background: #000; overflow: hidden; font-family: 'JetBrains Mono', monospace; }
-iframe { width: 100vw; height: 100vh; border: none; display: block; }
+iframe { width: 100vw; height: 100vh; border: none; display: block; opacity: 0; transition: opacity 1s; }
+#loader {
+position: fixed; inset: 0; background: #000; z-index: 50;
+display: flex; align-items: center; justify-content: center; flex-direction: column;
+color: #00f2ea;
+transition: opacity 0.5s; pointer-events: none;
+}
+#loader.done { opacity: 0; }
+.glitch { font-size: 2rem; letter-spacing: 5px; animation: glitch 0.5s infinite; }
+@keyframes glitch { 0%{opacity:1; transform:translate(0)} 20%{opacity:0.8; transform:translate(-2px, 2px)} 40%{opacity:1; transform:translate(2px, -2px)} 60%{opacity:0.8; transform:translate(-2px, -2px)} 80%{opacity:1; transform:translate(2px, 2px)} 100%{opacity:1; transform:translate(0)} }
 #qMenu {
-position: fixed; bottom: 20px; right: 20px;
-width: 50px; height: 50px;
-background: #000;
-border: 1px solid rgba(255,255,255,0.1);
-border-radius: 18px;
-box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-z-index: 99999;
+position: fixed; top: 20px; left: 20px;
+height: 54px; width: 54px;
+background: rgba(10, 10, 12, 0.85);
+backdrop-filter: blur(12px);
+-webkit-backdrop-filter: blur(12px);
+border: 1px solid rgba(255,255,255,0.15);
+border-radius: 16px;
+box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+z-index: 999999;
 overflow: hidden;
-transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+transition: width 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s;
 display: flex; align-items: center;
 }
-#qMenu:hover { width: 240px; border-color: #00f2ea; box-shadow: 0 0 20px rgba(0, 242, 234, 0.2); }
-.q-icon {
-min-width: 50px; height: 50px;
+#qMenu:hover {
+width: 290px;
+border-color: #00f2ea;
+box-shadow: 0 0 25px rgba(0, 242, 234, 0.25), inset 0 0 10px rgba(0,0,0,0.5);
+}
+.q-handle {
+min-width: 54px; height: 54px;
 display: flex; align-items: center; justify-content: center;
-color: #00f2ea; font-size: 20px; font-weight: bold;
+color: rgba(255,255,255,0.7);
 cursor: pointer;
+transition: 0.3s;
 }
-.q-items {
-display: flex; align-items: center; gap: 5px; opacity: 0; transition: 0.2s;
-padding-right: 15px; white-space: nowrap;
+#qMenu:hover .q-handle { color: #00f2ea; transform: rotate(90deg); }
+.q-content {
+display: flex; align-items: center; gap: 8px;
+opacity: 0; transform: translateX(-10px);
+transition: 0.3s ease;
+pointer-events: none;
+padding-right: 15px;
 }
-#qMenu:hover .q-items { opacity: 1; transition-delay: 0.1s; }
+#qMenu:hover .q-content { opacity: 1; transform: translateX(0); pointer-events: auto; transition-delay: 0.1s; }
 .q-btn {
-background: #111; border: 1px solid #222;
-color: #fff; font-family: inherit;
-font-size: 10px; padding: 8px 12px;
+background: rgba(255,255,255,0.05);
+border: 1px solid rgba(255,255,255,0.1);
+color: #fff;
+font-family: 'Outfit', sans-serif; font-weight: 700;
+font-size: 0.7rem; padding: 10px 14px;
 border-radius: 8px; cursor: pointer;
 text-transform: uppercase; letter-spacing: 1px;
-transition: 0.2s;
+transition: 0.2s; white-space: nowrap;
+display: flex; align-items: center; gap: 6px;
 }
-.q-btn:hover { background: #00f2ea; color: #000; box-shadow: 0 0 10px rgba(0, 242, 234, 0.5); }
+.q-btn:hover { background: #00f2ea; color: #000; border-color: #00f2ea; box-shadow: 0 0 15px rgba(0, 242, 234, 0.4); }
+.q-btn svg { width: 14px; height: 14px; stroke-width: 3; }
 </style>
 </head>
 <body>
-<iframe id="frm" src="${finalUrl}"></iframe>
+<div id="loader"><div class="glitch">ESTABLISHING CONNECTION...</div></div>
+<iframe id="frm" src="${finalUrl}" onload="document.getElementById('frm').style.opacity='1';document.getElementById('loader').classList.add('done')"></iframe>
 <div id="qMenu">
-<div class="q-icon">≡</div>
-<div class="q-items">
-<button class="q-btn" onclick="window.history.back()">Back</button>
-<button class="q-btn" onclick="document.getElementById('frm').src = document.getElementById('frm').src">Ref</button>
-<button class="q-btn" onclick="changeUrl()">URL</button>
-<button class="q-btn" onclick="window.close()">Home</button>
+<div class="q-handle">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+</div>
+<div class="q-content">
+<button class="q-btn" onclick="window.history.back()">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="15 18 9 12 15 6"></polyline></svg>
+BACK
+</button>
+<button class="q-btn" onclick="document.getElementById('frm').src = document.getElementById('frm').src">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+</button>
+<button class="q-btn" onclick="changeUrl()">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+SWAP
+</button>
+<button class="q-btn" style="color:var(--accent)" onclick="window.close()">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+HOME
+</button>
 </div>
 </div>
 <script>
@@ -619,6 +658,8 @@ function changeUrl() {
 let u = prompt('Enter new URL:');
 if(u) {
 if(!u.startsWith('http')) u = 'https://' + u;
+document.getElementById('loader').classList.remove('done');
+document.getElementById('frm').style.opacity='0';
 document.getElementById('frm').src = u;
 }
 }
