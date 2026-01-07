@@ -584,7 +584,7 @@ iframe { width: 100vw; height: 100vh; border: none; }
 <button class="btn" onclick="document.getElementById('nb').style.display='none'"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M17.94 17.94A10 10 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg></button>
 </div>
 </div>
-<iframe id="f" src="${finalUrl}"></iframe>
+<iframe id="f" src="${finalUrl}" allow="fullscreen" allowfullscreen></iframe>
 <script>
 let history = ["${finalUrl}"]; let pos = 0;
 function change() { const u = prompt("Enter URL:"); if(u) { const validU = u.startsWith('http') ? u : 'https://' + u; pos++; history = history.slice(0, pos); history.push(validU); document.getElementById('f').src = validU; } }
