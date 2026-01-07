@@ -1,282 +1,270 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NOVA | Distribution</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #fafafa;
-            --text: #1d1d1f;
-            --stable-accent: #0071e3;
-            --unstable-accent: #f5a623;
-            --card-bg: #ffffff;
-            --border: rgba(0,0,0,0.08);
-            --tape-yellow: #ffd700;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVA | Distribution</title>
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: 'Inter', -apple-system, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
+<style>
+:root {
+    --bg: #000000;
+    --panel: rgba(255,255,255,0.03);
+    --border: rgba(255,255,255,0.08);
+    --text: #f5f5f7;
+    --muted: #8e8e93;
+    --blue: #0a84ff;
+    --green: #30d158;
+    --orange: #ff9f0a;
+}
 
-        .wrapper {
-            max-width: 900px;
-            width: 100%;
-            text-align: center;
-        }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        .header {
-            margin-bottom: 60px;
-        }
+body {
+    background: radial-gradient(circle at top, #0b0b0b, #000);
+    color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+}
 
-        .header h1 {
-            font-size: 56px;
-            font-weight: 700;
-            letter-spacing: -2px;
-            margin-bottom: 10px;
-        }
+.wrapper {
+    max-width: 1000px;
+    width: 100%;
+    text-align: center;
+}
 
-        .header p {
-            font-size: 21px;
-            color: #86868b;
-            font-weight: 400;
-        }
+.header {
+    margin-bottom: 80px;
+}
 
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-        }
+.header h1 {
+    font-size: 72px;
+    font-weight: 900;
+    letter-spacing: -3px;
+    background: linear-gradient(180deg, #ffffff, #9ca3af);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 
-        .card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 32px;
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transition: all 0.5s cubic-bezier(0.15, 0, 0.5, 1);
-            position: relative;
-            overflow: hidden; /* Keeps the tape inside the card */
-        }
+.header p {
+    margin-top: 12px;
+    font-size: 18px;
+    color: var(--muted);
+}
 
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.08);
-            border-color: rgba(0,0,0,0.15);
-        }
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 32px;
+}
 
-        /* Coming Soon Tape Style */
-        .coming-soon-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 5;
-            pointer-events: none; /* Allows hover effects on the card still */
-        }
+.card {
+    position: relative;
+    background: linear-gradient(
+        180deg,
+        rgba(255,255,255,0.06),
+        rgba(255,255,255,0.02)
+    );
+    border: 1px solid var(--border);
+    border-radius: 36px;
+    padding: 46px;
+    backdrop-filter: blur(24px);
+    transition: all .5s cubic-bezier(.2,.8,.2,1);
+}
 
-        .tape {
-            background: var(--tape-yellow);
-            color: #000;
-            padding: 10px 100px;
-            font-weight: 900;
-            font-size: 18px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            transform: rotate(-15deg);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            border-top: 2px dashed rgba(0,0,0,0.2);
-            border-bottom: 2px dashed rgba(0,0,0,0.2);
-            white-space: nowrap;
-        }
+.card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 36px;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
+    pointer-events: none;
+}
 
-        .card-type {
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 16px;
-            padding: 6px 12px;
-            border-radius: 100px;
-        }
+.card:hover {
+    transform: translateY(-14px) scale(1.01);
+    box-shadow:
+        0 50px 120px rgba(0,0,0,.9),
+        0 0 60px rgba(10,132,255,.15);
+}
 
-        .stable-tag { background: #e8f2ff; color: var(--stable-accent); }
-        .unstable-tag { background: #fff8e6; color: var(--unstable-accent); }
+.tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border-radius: 999px;
+    margin-bottom: 22px;
+}
 
-        .card h2 {
-            font-size: 28px;
-            font-weight: 600;
-            margin-bottom: 12px;
-        }
+.stable { background: rgba(10,132,255,.15); color: var(--blue); }
+.online { background: rgba(48,209,88,.15); color: var(--green); }
+.experimental { background: rgba(255,159,10,.15); color: var(--orange); }
 
-        .card p {
-            font-size: 15px;
-            color: #86868b;
-            line-height: 1.5;
-            margin-bottom: 32px;
-            min-height: 45px;
-        }
+.card h2 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 14px;
+}
 
-        .btn {
-            width: 100%;
-            padding: 16px 24px;
-            border-radius: 16px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            border: none;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
+.card p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin-bottom: 36px;
+}
 
-        .btn-stable {
-            background: var(--stable-accent);
-            color: white;
-        }
+.btn {
+    width: 100%;
+    padding: 18px;
+    border-radius: 18px;
+    font-size: 16px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: all .3s ease;
+}
 
-        .btn-stable:hover { background: #0077ed; }
+.btn-download {
+    background: linear-gradient(135deg, #0a84ff, #0066cc);
+    color: white;
+    box-shadow: 0 0 40px rgba(10,132,255,.4);
+}
 
-        .btn-unstable {
-            background: var(--text);
-            color: white;
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
+.btn-download:hover {
+    box-shadow: 0 0 70px rgba(10,132,255,.7);
+    transform: translateY(-2px);
+}
 
-        /* Tooltip Logic */
-        .info-icon {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 20px;
-            height: 20px;
-            background: rgba(0,0,0,0.05);
-            border-radius: 50%;
-            font-size: 12px;
-            cursor: help;
-            position: relative;
-        }
+.btn-online {
+    background: linear-gradient(135deg, #30d158, #1ea94f);
+    color: black;
+    box-shadow: 0 0 40px rgba(48,209,88,.4);
+}
 
-        .tooltip {
-            visibility: hidden;
-            width: 220px;
-            background: #1d1d1f;
-            color: #fff;
-            text-align: center;
-            border-radius: 12px;
-            padding: 12px;
-            position: absolute;
-            z-index: 10;
-            bottom: 140%;
-            left: 50%;
-            transform: translateX(-50%);
-            opacity: 0;
-            transition: 0.3s;
-            font-size: 13px;
-            font-weight: 400;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        }
+.btn-online:hover {
+    box-shadow: 0 0 70px rgba(48,209,88,.7);
+    transform: translateY(-2px);
+}
 
-        .info-icon:hover .tooltip {
-            visibility: visible;
-            opacity: 1;
-        }
+.btn-disabled {
+    background: #111;
+    color: #555;
+    cursor: not-allowed;
+}
 
-        #status {
-            margin-top: 40px;
-            font-size: 14px;
-            font-weight: 500;
-            color: #86868b;
-        }
+.tape {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
 
-        @media (max-width: 768px) {
-            .grid { grid-template-columns: 1fr; }
-            .header h1 { font-size: 42px; }
-        }
-    </style>
+.tape span {
+    background: #ff9f0a;
+    color: black;
+    font-weight: 900;
+    padding: 14px 140px;
+    transform: rotate(-15deg);
+    letter-spacing: 2px;
+    box-shadow: 0 20px 40px rgba(0,0,0,.8);
+}
+
+#status {
+    margin-top: 50px;
+    font-size: 14px;
+    color: var(--muted);
+}
+
+@media (max-width: 600px) {
+    .header h1 { font-size: 52px; }
+}
+</style>
 </head>
+
 <body>
 
-    <div class="wrapper">
-        <div class="header">
-            <h1>NOVA</h1>
-            <p>Build 1.0.1</p>
-        </div>
+<div class="wrapper">
 
-        <div class="grid">
-            <div class="card">
-                <span class="card-type stable-tag">Stable Distribution</span>
-                <h2>Manual Download</h2>
-                <p>The standard, reliable version of NOVA for general production use.</p>
-                <button class="btn btn-stable" onclick="dl('stable')">Download Nova</button>
-            </div>
-
-            <div class="card">
-                <div class="coming-soon-overlay">
-                    <div class="tape">Coming Soon</div>
-                </div>
-                <span class="card-type unstable-tag">Experimental Branch</span>
-                <h2 style="opacity: 0.4;">Auto Updating 
-                    <span class="info-icon">?
-                        <span class="tooltip">Supported by the NOVA team but is not stable and not recommended for idiots.</span>
-                    </span>
-                </h2>
-                <p style="opacity: 0.4;">Live stream of the latest features. Expect frequent changes and bugs.</p>
-                <button class="btn btn-unstable" disabled>Initialize Stream</button>
-            </div>
-        </div>
-
-        <div id="status">Select a version to begin transfer</div>
+    <div class="header">
+        <h1>NOVA</h1>
+        <p>Build 1.0.1 · Secure Distribution Node</p>
     </div>
 
-    <script>
-        async function dl(v) {
-            if (v === 'unstable') return;
+    <div class="grid">
 
-            const status = document.getElementById('status');
-            const target = "https://raw.githubusercontent.com/TheDevMarcus/verison/refs/heads/main/main/nova.html";
+        <!-- DOWNLOAD -->
+        <div class="card">
+            <span class="tag stable">Stable</span>
+            <h2>Manual Download</h2>
+            <p>Maximum stability. Offline capable. Recommended for production use.</p>
+            <button class="btn btn-download" onclick="downloadNova()">Download NOVA</button>
+        </div>
 
-            try {
-                status.style.color = "#86868b";
-                status.innerText = "Requesting protocol...";
-                
-                const res = await fetch(target);
-                if (!res.ok) throw new Error();
-                
-                const blob = await res.blob();
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'nova.html';
-                a.click();
-                
-                status.innerText = "Transfer Complete";
-                status.style.color = "#34c759";
-            } catch (e) {
-                status.innerText = "Error: Protocol link broken";
-                status.style.color = "#ff3b30";
-            }
-        }
-    </script>
+        <!-- ONLINE -->
+        <div class="card">
+            <span class="tag online">Online</span>
+            <h2>Launch Online</h2>
+            <p>Instant browser execution. Zero installation. Always up to date.</p>
+            <button class="btn btn-online" onclick="launchOnline()">Open Web Version</button>
+        </div>
+
+        <!-- EXPERIMENTAL -->
+        <div class="card">
+            <div class="tape"><span>COMING SOON</span></div>
+            <span class="tag experimental">Experimental</span>
+            <h2 style="opacity:.35">Live Stream</h2>
+            <p style="opacity:.35">Bleeding-edge builds. Unstable. Powerful.</p>
+            <button class="btn btn-disabled" disabled>Initialize</button>
+        </div>
+
+    </div>
+
+    <div id="status">Standing by</div>
+
+</div>
+
+<script>
+async function downloadNova() {
+    const status = document.getElementById("status");
+    const url = "https://raw.githubusercontent.com/TheDevMarcus/verison/refs/heads/main/main/nova.html";
+
+    try {
+        status.textContent = "Establishing secure transfer…";
+        const res = await fetch(url);
+        if (!res.ok) throw new Error();
+
+        const blob = await res.blob();
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "nova.html";
+        a.click();
+
+        status.textContent = "Transfer complete";
+        status.style.color = "#30d158";
+    } catch {
+        status.textContent = "Transfer failed";
+        status.style.color = "#ff453a";
+    }
+}
+
+function launchOnline() {
+    window.location.href = "main.index";
+}
+</script>
+
 </body>
 </html>
